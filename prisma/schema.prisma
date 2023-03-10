@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ChannelType {
+  MULTI
+  ONE_TO_ONE
+}
+
+model Token {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  token     String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+}
+
+model User {
+  id                     Int                      @id @default(autoincrement())
+  password               String
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+  messageText            MessageText[]
+  token                  Token[]
+  UserChannelPermissions UserChannelPermissions[]
+  encryptedPrivateKey    String
+  passwordResetHash      String
+  publicKey              String
+}
+
+model Message {
+  id        Int           @id @default(autoincrement())
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  text      MessageText[]
+  channel   Channel       @relation(fields: [channelId], references: [id])
+  channelId Int
+}
+
+model MessageText {
+  id           Int      @id @default(autoincrement())
+  cipherText   String
+  targetUser   User     @relation(fields: [targetUserId], references: [id])
+  message      Message? @relation(fields: [messageId], references: [id])
+  messageId    Int?
+  targetUserId Int
+}
+
+model Channel {
+  id                     Int                      @id @default(autoincrement())
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+  name                   String
+  messages               Message[]
+  channelType            ChannelType
+  UserChannelPermissions UserChannelPermissions[]
+}
+
+model UserChannelPermissions {
+  id        Int     @id @default(autoincrement())
+  user      User    @relation(fields: [userId], references: [id])
+  userId    Int
+  channel   Channel @relation(fields: [channelId], references: [id])
+  channelId Int
+}
