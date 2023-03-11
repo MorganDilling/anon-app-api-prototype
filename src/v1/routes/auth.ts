@@ -30,7 +30,13 @@ router.post('/login', async (req: Request, res: Response) => {
 
   const token = await generateToken(userId);
 
-  res.status(200).json({ access: true, token });
+  res
+    .status(200)
+    .json({
+      access: true,
+      token,
+      encryptedPrivateKey: user.encryptedPrivateKey,
+    });
 });
 
 router.post('/logout', async (req: Request, res: Response) => {
