@@ -6,10 +6,10 @@ import { hashPassword, verifyPassword } from '@lib/password';
 import { generateToken } from '@lib/token';
 
 router.post('/create', async (req: Request, res: Response) => {
-  const { password, encryptedPrivateKey, passwordResetHash, publicKey } =
+  const { password, encryptedPrivateKey, keyRecoveryHash, publicKey } =
     req.body;
 
-  if (!password || !encryptedPrivateKey || !passwordResetHash || !publicKey) {
+  if (!password || !encryptedPrivateKey || !keyRecoveryHash || !publicKey) {
     return res.status(400).json({ message: 'Missing required fields' });
   }
 
@@ -19,7 +19,7 @@ router.post('/create', async (req: Request, res: Response) => {
     data: {
       password: hashedPassword,
       encryptedPrivateKey,
-      passwordResetHash,
+      keyRecoveryHash,
       publicKey,
     },
   });

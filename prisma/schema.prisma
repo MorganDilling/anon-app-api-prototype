@@ -33,7 +33,7 @@ model User {
   token                  Token[]
   UserChannelPermissions UserChannelPermissions[]
   encryptedPrivateKey    String
-  passwordResetHash      String
+  keyRecoveryHash        String
   publicKey              String
 }
 
