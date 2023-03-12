@@ -6,8 +6,15 @@ import { User } from '@prisma/client';
 
 import users from './routes/users';
 import auth from './routes/auth';
+import password from './routes/password';
 
-const excludeRoutes = ['/users/create', '/auth/login', '/auth/verify-token'];
+const excludeRoutes = [
+  '/users/create',
+  '/auth/login',
+  '/auth/verify-token',
+  '/password/request-reset-a',
+  '/password/request-reset-b',
+];
 
 router.get('/', (req: Request, res: Response) => {
   res.json({
@@ -16,9 +23,6 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 router.all('*', async (req: Request, res: Response, next: NextFunction) => {
-  console.log(req.path);
-  console.log(req.body);
-
   if (excludeRoutes.includes(req.path)) return next();
 
   const token: string | undefined = req.get('token');
@@ -36,5 +40,6 @@ router.all('*', async (req: Request, res: Response, next: NextFunction) => {
 
 router.use('/users', users);
 router.use('/auth', auth);
+router.use('/password', password);
 
 export default router;

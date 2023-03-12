@@ -48,8 +48,6 @@ router.get('/:userId', async (req: Request, res: Response) => {
 
   const { password, ...userWithoutPassword } = user;
 
-  console.log(userWithoutPassword);
-
   res.status(200).json({ user: userWithoutPassword });
 });
 

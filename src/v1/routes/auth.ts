@@ -8,8 +8,6 @@ import { generateToken, deleteToken, verifyToken } from '@lib/token';
 router.post('/login', async (req: Request, res: Response) => {
   const { password, userId } = req.body;
 
-  console.log(password, userId);
-
   if (!password || password == '' || !userId) {
     return res.status(401).json({ access: false });
   }
@@ -30,13 +28,11 @@ router.post('/login', async (req: Request, res: Response) => {
 
   const token = await generateToken(userId);
 
-  res
-    .status(200)
-    .json({
-      access: true,
-      token,
-      encryptedPrivateKey: user.encryptedPrivateKey,
-    });
+  res.status(200).json({
+    access: true,
+    token,
+    encryptedPrivateKey: user.encryptedPrivateKey,
+  });
 });
 
 router.post('/logout', async (req: Request, res: Response) => {
@@ -81,16 +77,12 @@ router.post('/logout-all', async (req: Request, res: Response) => {
 router.post('/verify-token', async (req: Request, res: Response) => {
   const { token } = req.body;
 
-  console.log(token);
-
   if (!token || token == '')
     return res
       .status(401)
       .json({ access: false, breakpoint: 'token existance check' });
 
   const [isValid, user] = await verifyToken(token);
-
-  console.log('isvalid', isValid, user);
 
   if (!isValid)
     return res
