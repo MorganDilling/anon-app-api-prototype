@@ -35,6 +35,10 @@ router.post('/request-reset-a', async (req: Request, res: Response) => {
     message: encryptedRandMessage.toString('base64'),
     encryptedPrivateKey: user.encryptedPrivateKey,
   });
+
+  setTimeout(() => {
+    delete tempMessages[userId];
+  }, 300000);
 });
 
 router.post('/request-reset-b', async (req: Request, res: Response) => {
